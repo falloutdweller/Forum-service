@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ForumService {
 
-    Post addPost(String author, PostAddUpdateDto postAddUpdateDto);
+    PostDto addPost(String author, PostAddUpdateDto postAddUpdateDto);
 
     PostDto findPostById(String id);
 

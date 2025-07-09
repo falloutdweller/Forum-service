@@ -19,7 +19,7 @@ public class ForumController {
     private final ForumService forumService;
 
     @PostMapping("/post/{user}")
-    public Post addPost(@PathVariable("user") String author, @RequestBody PostAddUpdateDto postAddUpdateDto) {
+    public PostDto addPost(@PathVariable("user") String author, @RequestBody PostAddUpdateDto postAddUpdateDto) {
         return forumService.addPost(author, postAddUpdateDto);
     }
 

@@ -22,7 +22,6 @@ public class Post {
     private String title;
     @Setter
     private String content;
-    @Setter
     private String author;
     private LocalDateTime dateCreated = LocalDateTime.now();
     @Setter
@@ -30,11 +29,11 @@ public class Post {
     private int likes;
     private List<Comment> comments = new ArrayList<>();
 
-    public Post(String title, String content, List<String> tags) {
+    public Post(String title, String content, String author, Set<String> tags) {
         this.title = title;
         this.content = content;
         this.tags = new HashSet<>(tags);
-        this.dateCreated = LocalDateTime.now();
+        this.author = author;
     }
 
     public void addLike() {

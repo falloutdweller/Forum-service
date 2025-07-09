@@ -22,10 +22,10 @@ public class ForumServiceImpl implements ForumService {
     private final ModelMapper modelMapper;
 
     @Override
-    public Post addPost(String author, PostAddUpdateDto postAddUpdateDto) {
-        Post post = modelMapper.map(postAddUpdateDto, Post.class);
-        post.setAuthor(author);
-        return forumRepository.save(post);
+    public PostDto addPost(String author, PostAddUpdateDto postAddUpdateDto) {
+        Post post = new Post(postAddUpdateDto.getTitle(), postAddUpdateDto.getContent(), author, postAddUpdateDto.getTags());
+        forumRepository.save(post);
+        return modelMapper.map(post, PostDto.class);
     }
 
     @Override
