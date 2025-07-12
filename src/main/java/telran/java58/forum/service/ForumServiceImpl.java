@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import telran.java58.forum.dao.ForumRepository;
 import telran.java58.forum.dto.CommentDto;
+import telran.java58.forum.dto.NewCommentDto;
 import telran.java58.forum.dto.PostAddUpdateDto;
 import telran.java58.forum.dto.PostDto;
 import telran.java58.forum.dto.exceptions.NotFoundException;
@@ -48,10 +49,9 @@ public class ForumServiceImpl implements ForumService {
     }
 
     @Override
-    public PostDto addComment(String id, String user, CommentDto message) {
+    public PostDto addComment(String id, String user, NewCommentDto newCommentDto) {
         Post post = forumRepository.findById(id).orElseThrow(NotFoundException::new);
-        Comment comment = modelMapper.map(message, Comment.class);
-        comment.setUser(user);
+        Comment comment = new Comment(user, newCommentDto.getMessage());
         post.addComment(comment);
         forumRepository.save(post);
         return modelMapper.map(post, PostDto.class);
@@ -64,9 +64,8 @@ public class ForumServiceImpl implements ForumService {
         return modelMapper.map(post, PostDto.class);
     }
     @Override
-    public List<PostDto> findPostsByTags(String tags) {
-        List<String> tagList = List.of(tags.split(","));
-        return forumRepository.findPostsByTagsContainingIgnoreCase(tagList)
+    public List<PostDto> findPostsByTags(List<String> tags) {
+        return forumRepository.findPostsByTagsContainingIgnoreCase(tags)
                 .map(p -> modelMapper.map(p, PostDto.class))
                 .toList();
     }
@@ -82,6 +81,9 @@ public class ForumServiceImpl implements ForumService {
         Post post = forumRepository.findById(id).orElseThrow(NotFoundException::new);
         if (postAddUpdateDto.getTitle() != null) {
             post.setTitle(postAddUpdateDto.getTitle());
+        }
+        if (postAddUpdateDto.getContent() != null) {
+            post.setContent(postAddUpdateDto.getContent());
         }
         if (postAddUpdateDto.getTags() != null) {
             post.setTags(postAddUpdateDto.getTags());

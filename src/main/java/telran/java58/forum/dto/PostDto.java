@@ -1,6 +1,7 @@
 package telran.java58.forum.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Builder
 public class PostDto {
     private String id;
     private String title;
@@ -18,6 +20,6 @@ public class PostDto {
     private String author;
     private LocalDateTime dateCreated;
     private Set<String> tags;
-    private int likes;
+    private Integer likes;
     private List<CommentDto> comments;
 }

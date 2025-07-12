@@ -25,14 +25,14 @@ public class Post {
     private String author;
     private LocalDateTime dateCreated = LocalDateTime.now();
     @Setter
-    private Set<String> tags;
+    private Set<String> tags = new HashSet<>();
     private int likes;
     private List<Comment> comments = new ArrayList<>();
 
     public Post(String title, String content, String author, Set<String> tags) {
         this.title = title;
         this.content = content;
-        this.tags = new HashSet<>(tags);
+        this.tags = tags;
         this.author = author;
     }
 
@@ -41,5 +41,14 @@ public class Post {
     }
     public void addComment(Comment message) {
         comments.add(message);
+    }
+    public void removeComment(Comment comment) {
+        comments.remove(comment);
+    }
+    public boolean addTag(String tag) {
+        return tags.add(tag);
+    }
+    public boolean removeTag(String tag) {
+        return tags.remove(tag);
     }
 }
