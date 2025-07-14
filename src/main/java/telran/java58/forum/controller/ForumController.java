@@ -1,8 +1,8 @@
 package telran.java58.forum.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import telran.java58.forum.dto.CommentDto;
 import telran.java58.forum.dto.NewCommentDto;
 import telran.java58.forum.dto.PostAddUpdateDto;
 import telran.java58.forum.dto.PostDto;
@@ -19,6 +19,7 @@ public class ForumController {
     private final ForumService forumService;
 
     @PostMapping("/post/{author}")
+    @ResponseStatus(HttpStatus.CREATED)
     public PostDto addPost(@PathVariable String author, @RequestBody PostAddUpdateDto postAddUpdateDto) {
         return forumService.addPost(author, postAddUpdateDto);
     }
@@ -29,6 +30,7 @@ public class ForumController {
     }
 
     @PatchMapping("/post/{id}/like")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addLike(@PathVariable String id) {
         forumService.addLike(id);
     }
