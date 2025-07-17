@@ -30,7 +30,6 @@ public class AuthenticationFilter implements Filter {
             try {
                 String[] credentials = getCredentials(request.getHeader("Authorization"));
                 System.out.println("Attempting to authenticate user: " + credentials[0]);
-                System.out.println("All users in repository: " + repository.findAll());
                 User user = repository.findById(credentials[0]).orElseThrow(RuntimeException::new);
                 if (!BCrypt.checkpw(credentials[1], user.getPassword())) {
                     throw new RuntimeException();
@@ -45,7 +44,7 @@ public class AuthenticationFilter implements Filter {
     }
 
     private boolean checkEndPoint(String method, String path){
-        return !(HttpMethod.POST.matches(method) && path.matches("/account/register"));
+        return !(HttpMethod.POST.matches(method) && path.matches("/account/register")) || path.matches("/forum/posts/.*");
     }
     private String[] getCredentials(String header) {
         String token = header.split(" ")[1];

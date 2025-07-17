@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import telran.java58.accounting.dao.AccountingRepository;
 import telran.java58.accounting.model.Role;
@@ -13,27 +14,30 @@ import telran.java58.accounting.model.User;
 import java.io.IOException;
 
 @Component
-@Order(20)
+@Order(40)
 @RequiredArgsConstructor
-public class AdminManagingRolesFilter implements Filter {
+public class UserDeleteFilter implements Filter {
     private final AccountingRepository accountingRepository;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-        if (checkEndPoint(request.getServletPath())) {
+        if (checkEndPoint(request.getMethod(), request.getServletPath())) {
             String login = request.getUserPrincipal().getName();
             User user = accountingRepository.findById(login).orElseThrow(RuntimeException::new);
-            if (!user.getRoles().contains(Role.ADMINISTRATOR)){
-                response.sendError(HttpServletResponse.SC_FORBIDDEN);
-                return;
+            if (!user.getRoles().contains(Role.ADMINISTRATOR)) {
+                String path = request.getRequestURI();
+                if (!path.substring("/account/user/".length()).equals(login)) {
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                    return;
+                }
             }
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
-    private boolean checkEndPoint(String path) {
-        return path.matches("/account/user/\\w+/role/\\w+");
+    private boolean checkEndPoint(String method, String path) {
+        return HttpMethod.DELETE.matches(method) && path.matches("/account/user/\\w+");
     }
 }
