@@ -8,7 +8,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import telran.java58.accounting.dao.AccountingRepository;
 import telran.java58.accounting.model.Role;
-import telran.java58.accounting.model.User;
+import telran.java58.security.model.UserSecurity;
 
 import java.io.IOException;
 
@@ -16,16 +16,14 @@ import java.io.IOException;
 @Order(20)
 @RequiredArgsConstructor
 public class AdminManagingRolesFilter implements Filter {
-    private final AccountingRepository accountingRepository;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         if (checkEndPoint(request.getServletPath())) {
-            String login = request.getUserPrincipal().getName();
-            User user = accountingRepository.findById(login).orElseThrow(RuntimeException::new);
-            if (!user.getRoles().contains(Role.ADMINISTRATOR)){
+            UserSecurity user = (UserSecurity) request.getUserPrincipal();
+            if (!user.getRoles().contains(Role.ADMINISTRATOR.name())){
                 response.sendError(HttpServletResponse.SC_FORBIDDEN);
                 return;
             }

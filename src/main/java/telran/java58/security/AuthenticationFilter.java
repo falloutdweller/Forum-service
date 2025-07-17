@@ -10,11 +10,15 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import telran.java58.accounting.dao.AccountingRepository;
+import telran.java58.accounting.model.Role;
 import telran.java58.accounting.model.User;
+import telran.java58.security.model.UserSecurity;
 
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Base64;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Order(10)
 @Component
@@ -34,7 +38,10 @@ public class AuthenticationFilter implements Filter {
                 if (!BCrypt.checkpw(credentials[1], user.getPassword())) {
                     throw new RuntimeException();
                 }
-                request = new WrappedRequest(request, user.getLogin());
+                Set<String> roles = user.getRoles().stream()
+                        .map(Role::name)
+                        .collect(Collectors.toSet());
+                request = new WrappedRequest(request, credentials[0], roles);
             } catch (Exception e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;
@@ -44,7 +51,8 @@ public class AuthenticationFilter implements Filter {
     }
 
     private boolean checkEndPoint(String method, String path){
-        return !(HttpMethod.POST.matches(method) && path.matches("/account/register")) || path.matches("/forum/posts/.*");
+        return !(HttpMethod.POST.matches(method) && path.matches("/account/register"))
+                || (HttpMethod.GET.matches(method) && path.matches("/forum/posts.*"));
     }
     private String[] getCredentials(String header) {
         String token = header.split(" ")[1];
@@ -54,15 +62,17 @@ public class AuthenticationFilter implements Filter {
 
     private static class WrappedRequest extends HttpServletRequestWrapper {
         private final String login;
+        private final Set<String> roles;
 
-        public WrappedRequest(HttpServletRequest request, String login) {
+        public WrappedRequest(HttpServletRequest request, String login, Set<String> roles) {
             super(request);
             this.login = login;
+            this.roles = roles;
         }
 
         @Override
         public Principal getUserPrincipal() {
-            return () -> login;
+            return new UserSecurity(login, roles);
         }
 
     }
