@@ -1,4 +1,4 @@
-package telran.java58.forum.model;
+package telran.java58.post.model;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

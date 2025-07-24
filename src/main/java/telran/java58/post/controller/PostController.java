@@ -1,12 +1,12 @@
-package telran.java58.forum.controller;
+package telran.java58.post.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import telran.java58.forum.dto.NewCommentDto;
-import telran.java58.forum.dto.PostAddUpdateDto;
-import telran.java58.forum.dto.PostDto;
-import telran.java58.forum.service.ForumService;
+import telran.java58.post.dto.NewCommentDto;
+import telran.java58.post.dto.PostAddUpdateDto;
+import telran.java58.post.dto.PostDto;
+import telran.java58.post.service.PostService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,53 +15,53 @@ import java.util.List;
 @RequestMapping("/forum")
 @RequiredArgsConstructor
 
-public class ForumController {
-    private final ForumService forumService;
+public class PostController {
+    private final PostService postService;
 
     @PostMapping("/post/{author}")
     @ResponseStatus(HttpStatus.CREATED)
     public PostDto addPost(@PathVariable String author, @RequestBody PostAddUpdateDto postAddUpdateDto) {
-        return forumService.addPost(author, postAddUpdateDto);
+        return postService.addPost(author, postAddUpdateDto);
     }
 
     @GetMapping("/post/{id}")
     public PostDto findPostById(@PathVariable String id) {
-        return forumService.findPostById(id);
+        return postService.findPostById(id);
     }
 
     @PatchMapping("/post/{id}/like")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addLike(@PathVariable String id) {
-        forumService.addLike(id);
+        postService.addLike(id);
     }
 
     @GetMapping("/posts/author/{author}")
     public List<PostDto> findPostsByAuthor(@PathVariable String author) {
-        return forumService.findPostsByAuthor(author);
+        return postService.findPostsByAuthor(author);
     }
 
     @PatchMapping("/post/{id}/comment/{user}")
     public PostDto addComment(@PathVariable String id, @PathVariable String user, @RequestBody NewCommentDto newCommentDto) {
-        return forumService.addComment(id, user, newCommentDto);
+        return postService.addComment(id, user, newCommentDto);
     }
 
     @DeleteMapping("/post/{id}")
     public PostDto deletePost(@PathVariable String id) {
-        return forumService.deletePost(id);
+        return postService.deletePost(id);
     }
 
     @GetMapping("/posts/tags")
     public List<PostDto> findPostsByTags(@RequestParam List<String> values) {
-        return forumService.findPostsByTags(values);
+        return postService.findPostsByTags(values);
     }
 
     @GetMapping("/posts/period")
     public List<PostDto> findPostsByPeriod(@RequestParam LocalDate dateFrom, @RequestParam LocalDate dateTo) {
-        return forumService.findPostsByPeriod(dateFrom, dateTo);
+        return postService.findPostsByPeriod(dateFrom, dateTo);
     }
 
     @PatchMapping("/post/{id}")
     public PostDto updatePost(@PathVariable String id, @RequestBody PostAddUpdateDto postAddUpdateDto) {
-        return forumService.updatePost(id, postAddUpdateDto);
+        return postService.updatePost(id, postAddUpdateDto);
     }
 }

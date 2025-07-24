@@ -1,15 +1,13 @@
-package telran.java58.forum.service;
+package telran.java58.post.service;
 
-import telran.java58.forum.dto.CommentDto;
-import telran.java58.forum.dto.NewCommentDto;
-import telran.java58.forum.dto.PostAddUpdateDto;
-import telran.java58.forum.dto.PostDto;
-import telran.java58.forum.model.Post;
+import telran.java58.post.dto.NewCommentDto;
+import telran.java58.post.dto.PostAddUpdateDto;
+import telran.java58.post.dto.PostDto;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public interface ForumService {
+public interface PostService {
 
     PostDto addPost(String author, PostAddUpdateDto postAddUpdateDto);
 

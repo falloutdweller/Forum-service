@@ -1,5 +1,6 @@
 package telran.java58.accounting.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class AccountingController{
     private final AccountingService accountingService;
 
     @PostMapping("/register")
-    public UserDto registerUser(@RequestBody UserRegisterDto userRegisterDto) {
+    public UserDto registerUser(@RequestBody @Valid UserRegisterDto userRegisterDto) {
         return accountingService.registerUser(userRegisterDto);
     }
 

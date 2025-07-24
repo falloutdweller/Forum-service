@@ -1,4 +1,4 @@
-package telran.java58.forum.dto;
+package telran.java58.post.dto;
 
 import lombok.*;
 
