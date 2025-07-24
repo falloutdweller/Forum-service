@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class UserRegisterDto {
     @NotBlank(message = "login is required")
-@Size(min = 3,max = 20, message = "login should be between 3 and 20 symbols")
+    @Size(min = 3, max = 20, message = "login should be between 3 and 20 symbols")
     private String login;
     @NotBlank(message = "password is required")
     @Size(min = 4, max = 20, message = "password should be between 4 and 20 symbols")

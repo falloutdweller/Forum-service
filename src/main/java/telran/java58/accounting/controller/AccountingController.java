@@ -1,6 +1,7 @@
 package telran.java58.accounting.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class AccountingController{
     }
 
     @PatchMapping("/user/{login}")
-    public UserDto updateUser(@PathVariable String login, @RequestBody UserUpdateDto userUpdateDto) {
+    public UserDto updateUser(@PathVariable String login, @RequestBody @Valid UserUpdateDto userUpdateDto) {
         return accountingService.updateUser(login, userUpdateDto);
     }
 
@@ -50,7 +51,7 @@ public class AccountingController{
 
     @PatchMapping("/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void changePassword(Principal principal, @RequestHeader("X-Password") String newPassword) {
+    public void changePassword(Principal principal, @RequestHeader("X-Password") @Size(min = 4, max = 20, message = "password should be between 4 and 20 symbols") String newPassword) {
         accountingService.changePassword(principal.getName(), newPassword);
     }
 

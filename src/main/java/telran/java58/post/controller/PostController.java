@@ -1,5 +1,6 @@
 package telran.java58.post.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class PostController {
 
     @PostMapping("/post/{author}")
     @ResponseStatus(HttpStatus.CREATED)
-    public PostDto addPost(@PathVariable String author, @RequestBody PostAddUpdateDto postAddUpdateDto) {
+    public PostDto addPost(@PathVariable String author, @RequestBody @Valid PostAddUpdateDto postAddUpdateDto) {
         return postService.addPost(author, postAddUpdateDto);
     }
 
@@ -41,7 +42,7 @@ public class PostController {
     }
 
     @PatchMapping("/post/{id}/comment/{user}")
-    public PostDto addComment(@PathVariable String id, @PathVariable String user, @RequestBody NewCommentDto newCommentDto) {
+    public PostDto addComment(@PathVariable String id, @PathVariable String user, @RequestBody @Valid NewCommentDto newCommentDto) {
         return postService.addComment(id, user, newCommentDto);
     }
 
