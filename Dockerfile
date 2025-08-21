@@ -4,7 +4,7 @@ LABEL authors="Simon"
 
 WORKDIR /app
 
-COPY forum-service-0.0.1-SNAPSHOT.jar ./forum-service.jar
+COPY ./target/forum-service-0.0.1-SNAPSHOT.jar ./forum-service.jar
 
 ENV MONGODB_USER=user
 ENV MONGODB_PASSWORD=""
